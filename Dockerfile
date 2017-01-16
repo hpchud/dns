@@ -5,8 +5,6 @@ ARG https_proxy=http://wwwproxy.hud.ac.uk:3128
 
 RUN yum -y install dnsmasq
 
-#RUN mv /etc/openldap /etc/openldap.dist
-
 COPY entrypoint.sh /entrypoint.sh
 
 EXPOSE 53/udp
