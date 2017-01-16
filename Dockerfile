@@ -1,7 +1,7 @@
 FROM centos:7
 
-ARG http_proxy=http://wwwproxy.hud.ac.uk:3128
-ARG https_proxy=http://wwwproxy.hud.ac.uk:3128
+#ARG http_proxy=http://wwwproxy.hud.ac.uk:3128
+#ARG https_proxy=http://wwwproxy.hud.ac.uk:3128
 
 RUN yum -y install dnsmasq
 
