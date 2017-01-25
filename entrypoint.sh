@@ -45,5 +45,11 @@ echo "addn-hosts=/etc/hosts.dnsmasq" > /etc/dnsmasq.d/1hosts.conf
 echo "adding conf files..."
 cp -r /root/dns-config/dnsmasq.d/*.conf /etc/dnsmasq.d/
 
+if [ -f "/root/dns-config/post.sh" ]; then
+    echo "running post-setup script..."
+    chmod a+x /root/dns-config/post.sh
+    /root/dns-config/post.sh
+fi
+
 echo "starting the server"
 exec "$@"
