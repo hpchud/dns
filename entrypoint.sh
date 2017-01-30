@@ -32,6 +32,7 @@ if [[ -f "/etc/hosts.dnsmasq" ]]; then
     echo "dnsmasq already configured, wiping it"
     rm -rf /etc/dnsmasq.d/*
     rm -rf /etc/hosts.dnsmasq
+    rm -rf /root/dns-config
 fi
 
 # clone the git repo
