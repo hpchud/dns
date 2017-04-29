@@ -1,11 +1,5 @@
 #!/bin/bash
 
-# originally based on https://github.com/dinkel/docker-openldap
-
-# When not limiting the open file descritors limit, the memory consumption of
-# slapd is absurdly high. See https://github.com/docker/docker/issues/8231
-ulimit -n 8192
-
 set -e
 
 DNSMASQ_DIR=/etc/dnsmasq.d
@@ -28,28 +22,35 @@ if [[ -z "$CONFIG_PASS" ]]; then
 fi
 
 # reset dnsmasq if it has already been configured
-if [[ -f "/etc/hosts.dnsmasq" ]]; then 
+if [[ -f "/etc/hosts.dnsmasq" ]]; then
     echo "dnsmasq already configured, wiping it"
     rm -rf /etc/dnsmasq.d/*
     rm -rf /etc/hosts.dnsmasq
-    rm -rf /root/dns-config
+    rm -rf /tmp/dns-config
 fi
 
 # clone the git repo
 echo "cloning config repository..."
-git clone https://${CONFIG_USER}:${CONFIG_PASS}@${CONFIG_REPO} /root/dns-config
+git clone https://${CONFIG_USER}:${CONFIG_PASS}@${CONFIG_REPO} /tmp/dns-config
+cd /tmp/dns-config
+
+if [ -f "./pre.sh" ]; then
+    echo "running pre-setup script..."
+    chmod a+x ./pre.sh
+    ./pre.sh
+fi
 
 echo "adding hosts..."
-cp /root/dns-config/hosts /etc/hosts.dnsmasq
+cp ./config/hosts /etc/hosts.dnsmasq
 echo "addn-hosts=/etc/hosts.dnsmasq" > /etc/dnsmasq.d/1hosts.conf
 
 echo "adding conf files..."
-cp -r /root/dns-config/dnsmasq.d/*.conf /etc/dnsmasq.d/
+cp -r ./config/dnsmasq.d/*.conf /etc/dnsmasq.d/
 
-if [ -f "/root/dns-config/post.sh" ]; then
+if [ -f "./post.sh" ]; then
     echo "running post-setup script..."
-    chmod a+x /root/dns-config/post.sh
-    /root/dns-config/post.sh
+    chmod a+x ./post.sh
+    ./post.sh
 fi
 
 echo "starting the server"
