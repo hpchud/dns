@@ -22,7 +22,7 @@ if [[ -z "$CONFIG_PASS" ]]; then
 fi
 
 # reset dnsmasq if it has already been configured
-if [[ -f "/etc/hosts.dnsmasq" ]]; then 
+if [[ -f "/etc/hosts.dnsmasq" ]]; then
     echo "dnsmasq already configured, wiping it"
     rm -rf /etc/dnsmasq.d/*
     rm -rf /etc/hosts.dnsmasq
